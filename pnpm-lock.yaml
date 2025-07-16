@@ -20,6 +20,9 @@ importers:
       joi:
         specifier: ^17.13.3
         version: 17.13.3
+      jsonwebtoken:
+        specifier: ^9.0.2
+        version: 9.0.2
       koa:
         specifier: ^3.0.0
         version: 3.0.0

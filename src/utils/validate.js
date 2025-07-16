@@ -2,6 +2,7 @@ const validate = (schema) => {
   return async (ctx, next) => {
     const data = ctx.request.body
     console.log('收到参数', data)
+    
     const { error } = schema.validate(data, {
       abortEarly: false
     })

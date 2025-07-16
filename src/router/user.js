@@ -9,5 +9,6 @@ import user_handler from '../handler/user.js'
 import userSchema from '../schema/user.js'
 
 router.post('/user/register', validate(userSchema), user_handler.register)
+router.post('/user/login', validate(userSchema), user_handler.login)
 
 export default router

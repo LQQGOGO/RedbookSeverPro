@@ -1,4 +1,8 @@
 import UserModel from '../models/userModel.js'
+import jwt from 'jsonwebtoken'
+import process from 'process'
+import dotenv from 'dotenv'
+dotenv.config()
 
 const register = async ctx => {
   try {
@@ -18,6 +22,41 @@ const register = async ctx => {
   }
 }
 
+const login = async ctx => {
+  try {
+    const { username, password } = ctx.request.body
+    const user = await UserModel.findByUsername(username)
+    if (!user) {
+      ctx.body = {
+        code: 401,
+        message: '用户不存在'
+      }
+      return
+    }
+    const isPasswordValid = await UserModel.comparePassword(password, user.password)
+    if (!isPasswordValid) {
+      ctx.body = {
+        code: 401,
+        message: '密码错误'
+      }
+      return
+    }
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN })
+    ctx.body = {
+      code: 200,
+      message: '登录成功',
+      data: { token }
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '登录失败',
+      error: error.message
+    }
+  }
+}
+
 export default {
-  register
+  register,
+  login
 }
