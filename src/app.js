@@ -8,6 +8,7 @@ const app = new Koa()
 
 //引入路由
 import userRouter from './router/user.js'
+import articleRouter from './router/article.js'
 
 //导入cors中间件
 import cors from '@koa/cors'
@@ -23,7 +24,7 @@ app.use(jwtMiddleware)
 
 //注册路由
 app.use(userRouter.routes())
-
+app.use(articleRouter.routes())
 //错误处理
 app.use(async (ctx, next) => {
   try {

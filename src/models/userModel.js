@@ -9,10 +9,11 @@ class UserModel {
       const defaultAvatar = 'D:/code/Server/RedbookSeverPro/src/assets/01.webp'
 
       const hashedPassword = await bcrypt.hash(password, 10)
+      const nickname = '用户' + username
 
       const [result] = await db.query(
-        'INSERT INTO users (username, password, avatar, bio, created_at) VALUES (?, ?, ?, ?, ?)',
-        [username, hashedPassword, defaultAvatar, '', new Date()]
+        'INSERT INTO users (username, password, avatar, bio, created_at, nickname) VALUES (?, ?, ?, ?, ?, ?)',
+        [username, hashedPassword, defaultAvatar, '', new Date(), nickname]
       )
       return result
     } catch (error) {
@@ -23,7 +24,6 @@ class UserModel {
   //通过用户名查询用户
   static async findByUsername(username) {
     try {
-      console.log(username)
       const [result] = await db.query('SELECT * FROM users WHERE username = ?', [username])
       return result[0]
     } catch (error) {
@@ -33,6 +33,24 @@ class UserModel {
   //比较密码
   static async comparePassword(password, hashedPassword) {
     return await bcrypt.compare(password, hashedPassword)
+  }
+  //通过用户id查询用户
+  static async findById(id) {
+    try {
+      const [result] = await db.query('SELECT * FROM users WHERE id = ?', [id])
+      return result[0]
+    } catch (error) {
+      throw new Error('查询用户失败', error)
+    }
+  }
+  //通过用户id批量查询用户
+  static async findByIds(ids) {
+    try {
+      const [result] = await db.query('SELECT * FROM users WHERE id IN (?)', [ids])
+      return result
+    } catch (error) {
+      throw new Error('查询用户失败', error)
+    }
   }
 }
 
