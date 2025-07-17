@@ -6,6 +6,13 @@ class UserModel {
   static async register(userData) {
     try {
       const { username, password } = userData
+
+      //查询用户是否存在
+      const [user] = await db.query('SELECT * FROM users WHERE username = ?', [username])
+      if(user.length > 0) {
+        throw new Error('用户已存在')
+      }
+
       const defaultAvatar = 'D:/code/Server/RedbookSeverPro/src/assets/01.webp'
 
       const hashedPassword = await bcrypt.hash(password, 10)
@@ -17,8 +24,7 @@ class UserModel {
       )
       return result
     } catch (error) {
-      throw new Error('注册失败', error)
-      
+      throw new Error(error.message || '注册失败')
     }
   }
   //通过用户名查询用户

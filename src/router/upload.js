@@ -1,6 +1,6 @@
 import Router from 'koa-router'
-import upload_handler from '../handler/upload'
-import upload from '../utils/upload'
+import upload_handler from '../handler/upload.js'
+import upload from '../utils/upload.js'
 
 const router = new Router()
 

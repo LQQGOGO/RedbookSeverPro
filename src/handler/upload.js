@@ -1,10 +1,12 @@
 import process from 'process'
 import dotenv from 'dotenv'
+import { log } from 'console'
 dotenv.config()
 
 const uploadImage = async ctx => {
   try {
-    if(!ctx.request.files || !ctx.request.files.file) {
+    console.log(ctx)
+    if(!ctx.file) {
       ctx.body = {
         code: 400,
         message: '请上传图片'
@@ -12,7 +14,7 @@ const uploadImage = async ctx => {
       return
     }
     //返回文件路径
-    const relativePath = `/upload/images/${ctx.request.files.file.filename}`
+    const relativePath = `/upload/images/${ctx.file.filename}`
     const baseUrl = process.env.BASE_URL
     const fullUrl = `${baseUrl}${relativePath}`
     ctx.body = {

@@ -9,6 +9,8 @@ const app = new Koa()
 //引入路由
 import userRouter from './router/user.js'
 import articleRouter from './router/article.js'
+import uploadRouter from './router/upload.js'
+
 
 //导入cors中间件
 import cors from '@koa/cors'
@@ -25,6 +27,16 @@ app.use(jwtMiddleware)
 //注册路由
 app.use(userRouter.routes())
 app.use(articleRouter.routes())
+app.use(uploadRouter.routes())
+
+// 注册路由后，立即添加调试中间件（在错误处理之前）
+app.use(async (ctx, next) => {
+  if (ctx.method === 'POST' && ctx.path === '/upload/image') {
+    console.log('路由匹配成功：/upload/image');
+  }
+  await next();
+});
+
 //错误处理
 app.use(async (ctx, next) => {
   try {
@@ -51,6 +63,8 @@ app.use(async (ctx, next) => {
 })
 
 const port = process.env.PORT || 3000
+
+
 
 app.listen(port, () => {
   console.log(`服务器运行在 http://localhost:${port}`)
