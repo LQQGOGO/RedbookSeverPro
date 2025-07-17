@@ -24,6 +24,7 @@
     "koa-joi-validate": "^0.5.1",
     "koa-jwt": "^4.0.4",
     "koa-router": "^13.1.1",
+    "koa-static": "^5.0.0",
     "mysql2": "^3.14.2"
   },
   "devDependencies": {

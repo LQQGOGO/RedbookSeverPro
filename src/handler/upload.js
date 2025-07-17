@@ -5,7 +5,6 @@ dotenv.config()
 
 const uploadImage = async ctx => {
   try {
-    console.log(ctx)
     if(!ctx.file) {
       ctx.body = {
         code: 400,

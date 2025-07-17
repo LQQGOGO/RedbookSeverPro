@@ -1,6 +1,12 @@
 import process from 'process'
 import dotenv from 'dotenv'
 import Koa from 'koa'
+import path from 'path'
+import koaStatic from 'koa-static'
+
+import { fileURLToPath } from 'url'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
 
 dotenv.config()
 
@@ -11,6 +17,8 @@ import userRouter from './router/user.js'
 import articleRouter from './router/article.js'
 import uploadRouter from './router/upload.js'
 
+//配置静态资源
+app.use(koaStatic(path.join(__dirname, '../upload')))
 
 //导入cors中间件
 import cors from '@koa/cors'
@@ -32,10 +40,10 @@ app.use(uploadRouter.routes())
 // 注册路由后，立即添加调试中间件（在错误处理之前）
 app.use(async (ctx, next) => {
   if (ctx.method === 'POST' && ctx.path === '/upload/image') {
-    console.log('路由匹配成功：/upload/image');
+    console.log('路由匹配成功：/upload/image')
   }
-  await next();
-});
+  await next()
+})
 
 //错误处理
 app.use(async (ctx, next) => {
@@ -63,8 +71,6 @@ app.use(async (ctx, next) => {
 })
 
 const port = process.env.PORT || 3000
-
-
 
 app.listen(port, () => {
   console.log(`服务器运行在 http://localhost:${port}`)
