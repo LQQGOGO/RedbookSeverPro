@@ -20,6 +20,27 @@ const getArticleList = async ctx => {
   }
 }
 
+//发布文章
+const publishArticle = async ctx => {
+  try {
+    const { userId, title, content, category, mediaUrls, mediaType, cover, coverHeight, coverWidth} = ctx.request.body
+    console.log({ userId, title, content, category, mediaUrls, mediaType, cover, coverHeight, coverWidth })
+    const article = await ArticleModel.createArticle({ userId, title, content, category, mediaUrls, mediaType, cover, coverHeight, coverWidth })
+    ctx.body = {
+      code: 200,
+      message: '发布文章成功',
+      data: article
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '发布文章失败',
+      error: error.message
+    }
+  }
+}
+
 export default {
-  getArticleList
+  getArticleList,
+  publishArticle
 }

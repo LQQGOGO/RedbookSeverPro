@@ -6,7 +6,7 @@ dotenv.config()
 const jwtMiddleware = jwt({
   secret: process.env.JWT_SECRET
 }).unless({
-  path: ['/user/register', '/user/login']
+  path: ['/user/register', '/user/login', '/upload']
 })
 
 export default jwtMiddleware

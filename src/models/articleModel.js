@@ -83,17 +83,19 @@ class ArticleModel {
   static async createArticle(articleData) {
     try {
       const {
+        userId,
         title,
         content,
-        userId,
         category,
-        media_url,
-        media_type,
-        created_at
+        mediaUrls,
+        mediaType,
+        cover,
+        coverHeight,
+        coverWidth
       } = articleData
       const [result] = await db.query(
-        'INSERT INTO articles (title, content, user_id, category, media_url, media_type, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [title, content, userId, category, media_url, media_type, created_at]
+        'INSERT INTO articles (title, content, user_id, category, media_urls, media_type, cover, cover_height, cover_width) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        [title, content, userId, category, mediaUrls, mediaType, cover, coverHeight, coverWidth]
       )
       const [newArticle] = await db.query(
         'SELECT * FROM articles WHERE id = ?',

@@ -38,6 +38,9 @@ importers:
       koa-jwt:
         specifier: ^4.0.4
         version: 4.0.4
+      koa-mount:
+        specifier: ^4.2.0
+        version: 4.2.0
       koa-router:
         specifier: ^13.1.1
         version: 13.1.1
@@ -643,6 +646,10 @@ packages:
   koa-jwt@4.0.4:
     resolution: {integrity: sha512-Tid9BQfpVtUG/8YZV38a+hDKll0pfVhfl7A/2cNaYThS1cxMFXylZzfARqHQqvNhHy9qM+qkxd4/z6EaIV4SAQ==}
     engines: {node: '>= 8'}
+
+  koa-mount@4.2.0:
+    resolution: {integrity: sha512-2iHQc7vbA9qLeVq5gKAYh3m5DOMMlMfIKjW/REPAS18Mf63daCJHHVXY9nbu7ivrnYn5PiPC4CE523Tf5qvjeQ==}
+    engines: {node: '>= 7.6.0'}
 
   koa-router@13.1.1:
     resolution: {integrity: sha512-3GxRi7CxEgsfGhdFf4OW4OLv0DFdyNl2drcOCtoezi+LDSnkg0mhr1Iq5Q25R4FJt3Gw6dcAKrcpaCJ7WJfhYg==}
@@ -1629,6 +1636,13 @@ snapshots:
       jsonwebtoken: 9.0.2
       koa-unless: 1.0.7
       p-any: 2.1.0
+
+  koa-mount@4.2.0:
+    dependencies:
+      debug: 4.4.1(supports-color@5.5.0)
+      koa-compose: 4.1.0
+    transitivePeerDependencies:
+      - supports-color
 
   koa-router@13.1.1:
     dependencies:

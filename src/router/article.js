@@ -6,5 +6,6 @@ const router = new Router()
 import article_handler from '../handler/article.js'
 
 router.get('/article/list', article_handler.getArticleList)
+router.post('/article/publish', article_handler.publishArticle)
 
 export default router
