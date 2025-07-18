@@ -2,10 +2,17 @@ import ArticleModel from '../models/articleModel.js'
 
 const getArticleList = async ctx => {
   try {
-    const { userId, category, title, content } = ctx.request.body
-    console.log('ctx.request.body', ctx.request.body)
-    
-    const articles = await ArticleModel.getAll({ userId, category, title, content })
+    const {
+      userId,
+      category,
+      title,
+      content,
+      page = 1,
+      pageSize = 20
+    } = ctx.query
+    // console.log('ctx', ctx.query)
+
+    const articles = await ArticleModel.getAll({ userId, category, title, content, page, pageSize })
     ctx.body = {
       code: 200,
       message: '获取文章列表成功',

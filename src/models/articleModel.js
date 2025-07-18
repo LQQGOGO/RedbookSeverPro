@@ -5,7 +5,7 @@ class ArticleModel {
   //获取文章列表
   static async getAll(options = {}) {
     try {
-      // 1. 查询文章列表（不包含用户详细信息）
+      // 1. 查询文章列表
       let query = `
       SELECT 
         a.id, a.title, a.cover, a.cover_width, a.cover_height, 
@@ -16,7 +16,14 @@ class ArticleModel {
     `
 
       let params = []
-      const { userId, category, title, content } = options
+      const {
+        userId,
+        category = 'recommend',
+        title,
+        content,
+        page = 1,
+        pageSize = 20
+      } = options
 
       // 条件筛选
       if (userId) {
@@ -36,10 +43,23 @@ class ArticleModel {
         params.push(`%${content}%`)
       }
 
+      // console.log('query', query)
       const [articles] = await db.query(query, params)
+      if (articles.length === 0) {
+        return {
+          data: [],
+          message: '无数据',
+          total: 0
+        }
+      }
+
+      const offset = (page - 1) * pageSize
+      // const total = articles.length
+      const articleList = articles.slice(offset, offset + pageSize)
+      // console.log('articles', articles)
 
       // 2. 收集所有 user_id 并去重
-      const userIds = [...new Set(articles.map(article => article.user_id))]
+      const userIds = [...new Set(articleList.map(article => article.user_id))]
 
       // 3. 批量查询用户信息
       const users = await UserModel.findByIds(userIds)
@@ -49,17 +69,18 @@ class ArticleModel {
       }, {})
 
       // 4. 将用户信息合并到文章中
-      const articlesWithUser = articles.map(article => ({
+      const articlesWithUser = articleList.map(article => ({
         ...article,
-        user: {
-          username: userIdToUser[article.user_id]?.username || '',
-          avatar: userIdToUser[article.user_id]?.avatar || '',
-          nickname: userIdToUser[article.user_id]?.nickname || ''
-        }
+
+        username: userIdToUser[article.user_id]?.username || '',
+        avatar: userIdToUser[article.user_id]?.avatar || '',
+        nickname: userIdToUser[article.user_id]?.nickname || ''
       }))
 
       return {
-        articles: articlesWithUser
+        message: '获取文章列表成功',
+        total: articlesWithUser.length,
+        data: articlesWithUser
       }
     } catch (error) {
       console.error('获取文章列表失败:', error)
@@ -95,7 +116,17 @@ class ArticleModel {
       } = articleData
       const [result] = await db.query(
         'INSERT INTO articles (title, content, user_id, category, media_urls, media_type, cover, cover_height, cover_width) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-        [title, content, userId, category, mediaUrls, mediaType, cover, coverHeight, coverWidth]
+        [
+          title,
+          content,
+          userId,
+          category,
+          mediaUrls,
+          mediaType,
+          cover,
+          coverHeight,
+          coverWidth
+        ]
       )
       const [newArticle] = await db.query(
         'SELECT * FROM articles WHERE id = ?',
