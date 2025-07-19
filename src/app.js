@@ -17,6 +17,7 @@ const app = new Koa()
 import userRouter from './router/user.js'
 import articleRouter from './router/article.js'
 import uploadRouter from './router/upload.js'
+import commentRouter from './router/comment.js'
 
 //配置静态资源
 app.use(mount('/upload', koaStatic(path.join(__dirname, '../upload'))))
@@ -37,6 +38,7 @@ app.use(jwtMiddleware)
 app.use(userRouter.routes())
 app.use(articleRouter.routes())
 app.use(uploadRouter.routes())
+app.use(commentRouter.routes())
 
 //错误处理
 app.use(async (ctx, next) => {
