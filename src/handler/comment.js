@@ -4,7 +4,8 @@ import CommentModel from '../models/commentModel.js'
 const createComment = async ctx => {
     try {
         const { articleId, userId, content } = ctx.request.body
-        const comment = await CommentModel.createComment(articleId, userId, content)
+        console.log('articleId', articleId, 'userId', userId, 'content', content)
+        const comment = await CommentModel.createComment({ articleId, userId, content })
         ctx.body = {
             code: 200,
             message: '发布评论成功',
@@ -23,6 +24,7 @@ const createComment = async ctx => {
 const getComments = async ctx => {
     try {
         const { articleId } = ctx.query
+        // console.log('articleId', articleId)
         const comments = await CommentModel.getComments(articleId)
         ctx.body = {
             code: 200,

@@ -15,7 +15,8 @@ class UserModel {
         throw new Error('用户已存在')
       }
 
-      const defaultAvatar = 'D:/code/Server/RedbookSeverPro/src/assets/01.webp'
+      const defaultAvatar =
+        'https://img0.baidu.com/it/u=221171848,1966442967&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500'
 
       const hashedPassword = await bcrypt.hash(password, 10)
       const nickname = '用户' + username
