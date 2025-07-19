@@ -58,7 +58,7 @@ const login = async ctx => {
 
 const getLikedArticles = async ctx => {
   try {
-    const { userId } = ctx.request.body
+    const { userId } = ctx.query
     const articles = await UserModel.findLikedArticles(userId)
     ctx.body = {
       code: 200,
@@ -77,7 +77,7 @@ const getLikedArticles = async ctx => {
 
 const getCollectedArticles = async ctx => {
   try {
-    const { userId } = ctx.request.body
+    const { userId } = ctx.query
     const articles = await UserModel.findCollectedArticles(userId)
     ctx.body = {
       code: 200,

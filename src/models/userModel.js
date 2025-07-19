@@ -62,7 +62,7 @@ class UserModel {
       ])
       return result
     } catch (error) {
-      throw new Error('查询用户失败', error)
+      throw new Error('批量查询用户失败', error)
     }
   }
 

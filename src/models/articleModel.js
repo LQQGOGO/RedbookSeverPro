@@ -89,12 +89,29 @@ class ArticleModel {
   }
 
   //获取文章详情
-  static async getById(id) {
+  static async getArticleDetail(id) {
     try {
-      const [result] = await db.query('SELECT * FROM articles WHERE id = ?', [
+      const [article] = await db.query('SELECT * FROM articles WHERE id = ?', [
         id
       ])
-      return result[0]
+      if (article.length === 0) {
+        return {
+          message: '文章不存在',
+          data: []
+        }
+      }
+      // console.log('article', article)
+      const user = await UserModel.findById(article[0].user_id)
+      // console.log('user', user)
+      const articleWithUser = {
+        ...article[0],
+        avatar: user.avatar,
+        nickname: user.nickname
+      }
+      return {
+        message: '获取文章详情成功',
+        data: articleWithUser
+      }
     } catch (error) {
       throw new Error('获取文章详情失败', error)
     }
@@ -203,6 +220,36 @@ class ArticleModel {
       }
     } catch (error) {
       throw new Error('取消收藏文章失败', error)
+    }
+  }
+
+  //通过id查找是否点赞过
+  static async didLiked(articleId, userId) {
+    try {
+      const [result] = await db.query(
+        'SELECT * FROM likes WHERE user_id = ? AND article_id = ?',
+        [userId, articleId]
+      )
+      // console.log('result', result, 'userId', userId, 'articleId', articleId)
+      if (result.length === 0) {
+        return false
+      }
+      return true
+    } catch (error) {
+      throw new Error('查询是否点赞过失败', error)
+    }
+  }
+
+  //通过id查找是否收藏过
+  static async didCollect(articleId, userId) {
+    try {
+      const [result] = await db.query('SELECT * FROM favorites WHERE user_id = ? AND article_id = ?', [userId, articleId])
+      if (result.length === 0) {
+        return false
+      }
+      return true
+    } catch (error) {
+      throw new Error('查询是否收藏过失败', error)
     }
   }
 }

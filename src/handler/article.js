@@ -47,6 +47,25 @@ const publishArticle = async ctx => {
   }
 }
 
+//获取文章详情
+const getArticleDetail = async ctx => {
+  try {
+    const { id } = ctx.query
+    const article = await ArticleModel.getArticleDetail(id)
+    ctx.body = {
+      code: 200,
+      message: '获取文章详情成功',
+      data: article
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '获取文章详情失败',
+      error: error.message
+    }
+  }
+}
+
 //点赞文章
 const likeArticle = async ctx => {
   try {
@@ -124,11 +143,55 @@ const cancelCollectArticle = async ctx => {
   }
 }
 
+//通过id查找是否点赞过
+const didLiked = async ctx => {
+  try {
+    const { id, userId } = ctx.query
+    console.log('id', id, 'userId', userId)
+    const result = await ArticleModel.didLiked(id, userId)
+    // console.log('result', result)
+    ctx.body = {
+      code: 200,
+      message: '查询是否点赞过成功',
+      data: result
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '查询是否点赞过失败',
+      error: error.message
+    }
+  }
+}
+
+//通过id查找是否收藏过
+const didCollected = async ctx => {
+  try {
+    const { id, userId } = ctx.query
+    const result = await ArticleModel.didCollect(id, userId)
+    // console.log('result', result)
+    ctx.body = {
+      code: 200,
+      message: '查询是否收藏过成功',
+      data: result
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '查询是否收藏过失败',
+      error: error.message
+    }
+  }
+}
+
 export default {
   getArticleList,
   publishArticle,
   likeArticle,
   cancelLikeArticle,
   collectArticle,
-  cancelCollectArticle
+  cancelCollectArticle,
+  getArticleDetail,
+  didLiked,
+  didCollected
 }
