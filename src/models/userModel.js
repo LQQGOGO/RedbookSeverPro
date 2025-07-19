@@ -8,8 +8,10 @@ class UserModel {
       const { username, password } = userData
 
       //查询用户是否存在
-      const [user] = await db.query('SELECT * FROM users WHERE username = ?', [username])
-      if(user.length > 0) {
+      const [user] = await db.query('SELECT * FROM users WHERE username = ?', [
+        username
+      ])
+      if (user.length > 0) {
         throw new Error('用户已存在')
       }
 
@@ -30,7 +32,10 @@ class UserModel {
   //通过用户名查询用户
   static async findByUsername(username) {
     try {
-      const [result] = await db.query('SELECT * FROM users WHERE username = ?', [username])
+      const [result] = await db.query(
+        'SELECT * FROM users WHERE username = ?',
+        [username]
+      )
       return result[0]
     } catch (error) {
       throw new Error('查询用户失败', error)
@@ -52,10 +57,53 @@ class UserModel {
   //通过用户id批量查询用户
   static async findByIds(ids) {
     try {
-      const [result] = await db.query('SELECT * FROM users WHERE id IN (?)', [ids])
+      const [result] = await db.query('SELECT * FROM users WHERE id IN (?)', [
+        ids
+      ])
       return result
     } catch (error) {
       throw new Error('查询用户失败', error)
+    }
+  }
+
+  //通过id查找点赞过的文章
+  static async findLikedArticles(userId) {
+    try {
+      const [result] = await db.query(
+        'SELECT * FROM articles WHERE id IN (SELECT article_id FROM likes WHERE user_id = ?)',
+        [userId]
+      )
+      if (result.length === 0) {
+        return {
+          message: '没有点赞过的文章',
+          data: []
+        }
+      }
+      return {
+        total: result.length,
+        data: result
+      }
+    } catch (error) {
+      throw new Error('查询点赞过的文章失败', error)
+    }
+  }
+
+  //通过id查找收藏过的文章
+  static async findCollectedArticles(userId) {
+    try {
+      const [result] = await db.query('SELECT * FROM articles WHERE id IN (SELECT article_id FROM favorites WHERE user_id = ?)', [userId])
+      if (result.length === 0) {
+        return {
+          message: '没有收藏过的文章',
+          data: []
+        }
+      }
+      return {
+        total: result.length,
+        data: result
+      }
+    } catch (error) {
+      throw new Error('查询收藏过的文章失败', error)
     }
   }
 }

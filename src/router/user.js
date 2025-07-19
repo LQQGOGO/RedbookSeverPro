@@ -10,5 +10,7 @@ import userSchema from '../schema/user.js'
 
 router.post('/user/register', validate(userSchema), user_handler.register)
 router.post('/user/login', validate(userSchema), user_handler.login)
+router.get('/user/liked', user_handler.getLikedArticles)
+router.get('/user/collected', user_handler.getCollectedArticles)
 
 export default router

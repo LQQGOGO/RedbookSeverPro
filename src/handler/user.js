@@ -56,7 +56,46 @@ const login = async ctx => {
   }
 }
 
+const getLikedArticles = async ctx => {
+  try {
+    const { userId } = ctx.request.body
+    const articles = await UserModel.findLikedArticles(userId)
+    ctx.body = {
+      code: 200,
+      message: '查询点赞过的文章成功',
+      data: articles
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '查询点赞过的文章失败',
+      error: error.message
+    }
+  }
+
+}
+
+const getCollectedArticles = async ctx => {
+  try {
+    const { userId } = ctx.request.body
+    const articles = await UserModel.findCollectedArticles(userId)
+    ctx.body = {
+      code: 200,
+      message: '查询收藏过的文章成功',
+      data: articles
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '查询收藏过的文章失败',
+      error: error.message
+    }
+  }
+}
+
 export default {
   register,
-  login
+  login,
+  getLikedArticles,
+  getCollectedArticles
 }
