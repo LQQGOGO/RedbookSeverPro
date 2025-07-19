@@ -47,7 +47,88 @@ const publishArticle = async ctx => {
   }
 }
 
+//点赞文章
+const likeArticle = async ctx => {
+  try {
+    const { id, userId } = ctx.request.body
+    console.log({ id, userId })
+    const article = await ArticleModel.likeArticle(id, userId)
+    ctx.body = {
+      code: 200,
+      message: '点赞文章成功',
+      data: article
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '点赞文章失败',
+      error: error.message
+    }
+  }
+}
+
+//取消点赞文章
+const cancelLikeArticle = async ctx => {
+  try {
+    const { id, userId } = ctx.request.body
+    const article = await ArticleModel.cancelLikeArticle(id, userId)
+    ctx.body = {
+      code: 200,
+      message: '取消点赞文章成功',
+      data: article
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '取消点赞文章失败',
+      error: error.message
+    }
+  }
+}
+
+//收藏文章
+const collectArticle = async ctx => {
+  try {
+    const { id, userId } = ctx.request.body
+    const article = await ArticleModel.collectArticle(id, userId)
+    ctx.body = {
+      code: 200,
+      message: '收藏文章成功',
+      data: article
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '收藏文章失败',
+      error: error.message
+    }
+  }
+}
+
+//取消收藏文章
+const cancelCollectArticle = async ctx => {
+  try {
+    const { id, userId } = ctx.request.body
+    const article = await ArticleModel.cancelCollectArticle(id, userId)
+    ctx.body = {
+      code: 200,
+      message: '取消收藏文章成功',
+      data: article
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '取消收藏文章失败',
+      error: error.message
+    }
+  }
+}
+
 export default {
   getArticleList,
-  publishArticle
+  publishArticle,
+  likeArticle,
+  cancelLikeArticle,
+  collectArticle,
+  cancelCollectArticle
 }

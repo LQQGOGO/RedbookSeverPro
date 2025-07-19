@@ -137,6 +137,74 @@ class ArticleModel {
       throw new Error('发布文章失败', error)
     }
   }
+
+  //点赞文章
+  static async likeArticle(articleId, userId) {
+    try {
+      const [result1] = await db.query('UPDATE articles SET like_count = like_count + 1 WHERE id = ?', [articleId])
+      const [result2] = await db.query('INSERT INTO likes (article_id, user_id) VALUES (?, ?)', [articleId, userId])
+      return {
+        message: '点赞文章成功',
+        data: {
+          articleId,
+          userId
+        }
+      }
+    } catch (error) {
+      throw new Error('点赞文章失败', error)
+    }
+  }
+
+  //取消点赞文章
+  static async cancelLikeArticle(articleId, userId) {
+    try {
+      const [result1] = await db.query('UPDATE articles SET like_count = like_count - 1 WHERE id = ?', [articleId])
+      const [result2] = await db.query('DELETE FROM likes WHERE article_id = ? AND user_id = ?', [articleId, userId])
+      return {
+        message: '取消点赞文章成功',
+        data: {
+          articleId,
+          userId
+        }
+      }
+    } catch (error) {
+      throw new Error('取消点赞文章失败', error)
+    }
+  }
+
+  //收藏文章
+  static async collectArticle(articleId, userId) {
+    try {
+      const [result1] = await db.query('UPDATE articles SET collect_count = collect_count + 1 WHERE id = ?', [articleId])
+      const [result2] = await db.query('INSERT INTO favorites (article_id, user_id) VALUES (?, ?)', [articleId, userId])
+      return {
+        message: '收藏文章成功',
+        data: {
+          articleId,
+          userId
+        }
+      }
+    } catch (error) {
+      throw new Error('收藏文章失败', error)
+    }
+  }
+
+  //取消收藏文章
+  static async cancelCollectArticle(articleId, userId) {
+    try {
+      const [result1] = await db.query('UPDATE articles SET collect_count = collect_count - 1 WHERE id = ?', [articleId])
+      const [result2] = await db.query('DELETE FROM favorites WHERE article_id = ? AND user_id = ?', [articleId, userId])
+      return {
+        message: '取消收藏文章成功',
+        data: {
+          articleId,
+          userId
+        }
+      }
+    } catch (error) {
+      throw new Error('取消收藏文章失败', error)
+    }
+  }
 }
 
 export default ArticleModel

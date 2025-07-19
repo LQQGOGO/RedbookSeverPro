@@ -7,5 +7,9 @@ import article_handler from '../handler/article.js'
 
 router.get('/article/list', article_handler.getArticleList)
 router.post('/article/publish', article_handler.publishArticle)
+router.post('/article/like', article_handler.likeArticle)
+router.post('/article/cancel_like', article_handler.cancelLikeArticle)
+router.post('/article/collect', article_handler.collectArticle)
+router.post('/article/cancel_collect', article_handler.cancelCollectArticle)
 
 export default router
