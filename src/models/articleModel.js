@@ -60,6 +60,13 @@ class ArticleModel {
 
       // 2. 收集所有 user_id 并去重
       const userIds = [...new Set(articleList.map(article => article.user_id))]
+      if (userIds.length === 0) {
+        return {
+          data: [],
+          message: '无数据',
+          total: 0
+        }
+      }
 
       // 3. 批量查询用户信息
       const users = await UserModel.findByIds(userIds)

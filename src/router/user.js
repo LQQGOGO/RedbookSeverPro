@@ -12,5 +12,6 @@ router.post('/user/register', validate(userSchema), user_handler.register)
 router.post('/user/login', validate(userSchema), user_handler.login)
 router.get('/user/liked', user_handler.getLikedArticles)
 router.get('/user/collected', user_handler.getCollectedArticles)
+router.get('/user/info', user_handler.getUserInfo)
 
 export default router

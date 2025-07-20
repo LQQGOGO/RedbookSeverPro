@@ -70,6 +70,8 @@ class UserModel {
   //通过id查找点赞过的文章
   static async findLikedArticles(userId) {
     try {
+      // console.log(userId)
+
       const [result] = await db.query(
         'SELECT * FROM articles WHERE id IN (SELECT article_id FROM likes WHERE user_id = ?)',
         [userId]
@@ -80,9 +82,26 @@ class UserModel {
           data: []
         }
       }
+      // 查询用户信息
+      const user = await UserModel.findById(userId)
+      // const userIdToUser = user.reduce((map, user) => {
+      //   map[user.id] = user
+      //   return map
+      // }, {})
+      // console.log(user)
+
+      // 将用户信息合并到文章中
+      const articlesWithUser = result.map(article => ({
+        ...article,
+
+        username: user?.username || '',
+        avatar: user?.avatar || '',
+        nickname: user?.nickname || ''
+      }))
+      // console.log(articlesWithUser)
       return {
         total: result.length,
-        data: result
+        data: articlesWithUser
       }
     } catch (error) {
       throw new Error('查询点赞过的文章失败', error)
@@ -99,9 +118,18 @@ class UserModel {
           data: []
         }
       }
+
+      const user = await UserModel.findById(userId)
+      const articlesWithUser = result.map(article => ({
+        ...article,
+
+        username: user?.username || '',
+        avatar: user?.avatar || '',
+        nickname: user?.nickname || ''
+      }))
       return {
         total: result.length,
-        data: result
+        data: articlesWithUser
       }
     } catch (error) {
       throw new Error('查询收藏过的文章失败', error)

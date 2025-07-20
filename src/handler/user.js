@@ -93,9 +93,29 @@ const getCollectedArticles = async ctx => {
   }
 }
 
+const getUserInfo = async ctx => {
+  try {
+    const { userId } = ctx.query
+    const user = await UserModel.findById(userId)
+    console.log(user)
+    ctx.body = {
+      code: 200,
+      message: '查询用户信息成功',
+      data: user
+    }
+  } catch (error) {
+    ctx.body = {
+      code: 500,
+      message: '查询用户信息失败',
+      error: error.message
+    }
+  }
+}
+
 export default {
   register,
   login,
   getLikedArticles,
-  getCollectedArticles
+  getCollectedArticles,
+  getUserInfo
 }
